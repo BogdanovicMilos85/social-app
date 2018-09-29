@@ -15,47 +15,58 @@
 	app.appendChild(container);
 
 
+	const request = new XMLHttpRequest();
+	const url = 'data.json';
 
-	let request = new XMLHttpRequest();
+	request.open('GET', url, true);
+	request.onload = function() {
 
-	request.open('GET', 'data.json', true);
-	request.onload = function () {
+		// Begin accessing JSON data here
+		var data = JSON.parse(this.response);
+		if (request.status >= 200 && request.status < 400) {
+			data.forEach(cur => {
+				let card = document.createElement('div');
+				card.setAttribute('class', 'card');
 
-	  // Begin accessing JSON data here
-	  const data = JSON.parse(this.response);
-	  if (request.status >= 200 && request.status < 400) {
-		data.forEach(cur => {
-			let card = document.createElement('div');
-			card.setAttribute('class', 'card');
+				let h2 = document.createElement('h2');
+				h2.textContent = cur.firstName + " " + cur.surname;
 
-			let h2 = document.createElement('h2');
-			h2.textContent = cur.firstName + " " + cur.surname;
+				let p = document.createElement('p');
+				p.textContent = `Age: ${cur.age}`;
 
-			let p = document.createElement('p');
-			p.textContent = `Age: ${cur.age}`;
+				let p2 = document.createElement('p');
+				p2.textContent = `Gender: ${cur.gender}`;
 
-			let p2 = document.createElement('p');
-			p2.textContent = `Gender: ${cur.gender}`;
+				let btn = document.createElement('button');
+				btn.setAttribute('class', 'btn');
+				btn.textContent = 'Find more';
 
-			let btn = document.createElement('button');
-			btn.setAttribute('class', 'btn');
-			btn.textContent = 'Find more';
-
-			container.appendChild(card);
-			card.appendChild(h2);
-			card.appendChild(p);
-			card.appendChild(p2);
-			card.appendChild(btn);
-		});
-	  } else {
+				container.appendChild(card);
+				card.appendChild(h2);
+				card.appendChild(p);
+				card.appendChild(p2);
+				card.appendChild(btn);
+				
+				var ids = cur.id;
+				var arr = cur.friends;
+				var fullName = `${cur.firstName} ${cur.surname}`;
+				
+				arr.forEach(el => {
+					if(el= ids) {
+						console.log(fullName);
+					}
+				});
+			});
+		} else {
 			const errorMessage = document.createElement('marquee');
 			errorMessage.textContent = `Something went wrong!`;
 			app.appendChild(errorMessage);
-	  }
+		}
+		
+		console.log(data);
 	}
 
 	request.send();
-
 }
 
 
