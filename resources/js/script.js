@@ -39,10 +39,6 @@
 			}
 		},
 	}
-	
-	users.data.forEach(el => {
-		
-	})
 
 	const request = new XMLHttpRequest();
 	const url = 'data.json';
@@ -64,7 +60,14 @@
 
 	request.send();
 	
+	
 	var card, h2, p, p2, btn;
+	
+	var ids = [];
+	var usersAll = [];
+	var friends = [];
+	
+	
 	
 	function getData(ourData) {
 		ourData.forEach(cur => {
@@ -94,19 +97,30 @@
 		
 		document.body.addEventListener('click', function(event) {
 			if(event.srcElement.id == 'btn') {
-				for(i = 0; i < ourData.length; i++) {
-					var ids = ourData[i].id;
-					console.log(ids);
-					for(ii = 0; ii < ourData[i].friends.length; ii++){
-						var friendsID = ourData[i].friends[ii];
-						if(friendsID = ids) {
-							console.log(ourData[ids].firstName + ourData[ids].surname);
-						}
-					}
-				}
+				
 			}
+		});
+		
+		ourData.forEach(cur => {
+			//ids.push(cur);
+			//console.log(cur);
+			//console.log(index);
+			//
+			//console.log(ids);
+			usersAll.push(cur);
+//			//console.log(usersAll);
+//			
+//			
+//			//console.log(friends);
+//			
+//			if(cur.id = ids) {
+//			//	console.log(cur.firstName + cur.surname);
+//			}
+//			
 		})
 		
 	}
+	
+	console.log(usersAll);
 }
 
