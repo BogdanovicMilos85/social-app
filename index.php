@@ -11,7 +11,6 @@
 	<body>
 		<h1>Social App</h1>
 		<div id="root">
-		<!--	<button id="btn">Click</button> -->
 		</div>
 		<footer id="footer"></footer>
 		<script src="resources/js/script.js"></script>
