@@ -49,7 +49,7 @@ p {
     margin: 0;
 }
 
-.btn {
+#btn {
     display: block;
     margin: 15px auto;
     font-size: 14px;
@@ -64,7 +64,8 @@ p {
 	-webkit-transition: border 0.2s, color 0.2s;
 	transition: border 0.2s, color 0.2s;
 }
-.btn:hover {
+
+#btn:hover {
     border: 1px solid #f39c12;
     color: #f39c12;
 }

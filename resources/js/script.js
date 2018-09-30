@@ -1,6 +1,5 @@
 {
 	const app = document.getElementById('root');
-
 	const logo = document.createElement('img');
 	logo.src = 'resources/images/logo.png';
 
@@ -13,71 +12,101 @@
 
 	app.appendChild(logo);
 	app.appendChild(container);
+	
+	var users = {
+		data: [],
+		user: [],
+		friendsIds: [],
+		friends: [],
+		getUser: function(id) {
+			this.data.forEach(function(user) {
+				if (user.id == id) {
+					this.user = user;
+			 	}
+			});
+		},
 
+		getFriends: function() {
+			if (this.user != "") {
+				this.friendsIds = this.user.friends;
+			  	this.data.forEach(function(user) {
+					if (this.friendsIds.indexOf(user.id)) {
+				  		this.friends.push(user);
+					}
+			  	});
+			} else {
+			  console.error("You didn\'t select appropriate user.");
+			}
+		},
+	}
+	
+	users.data.forEach(el => {
+		
+	})
 
 	const request = new XMLHttpRequest();
 	const url = 'data.json';
 
 	request.open('GET', url, true);
 	request.onload = function() {
-
-		// Begin accessing JSON data here
-		var data = JSON.parse(this.response);
+		//var data = JSON.parse(this.response);
 		if (request.status >= 200 && request.status < 400) {
-			data.forEach(cur => {
-				let card = document.createElement('div');
-				card.setAttribute('class', 'card');
-
-				let h2 = document.createElement('h2');
-				h2.textContent = cur.firstName + " " + cur.surname;
-
-				let p = document.createElement('p');
-				p.textContent = `Age: ${cur.age}`;
-
-				let p2 = document.createElement('p');
-				p2.textContent = `Gender: ${cur.gender}`;
-
-				let btn = document.createElement('button');
-				btn.setAttribute('class', 'btn');
-				btn.textContent = 'Find more';
-
-				container.appendChild(card);
-				card.appendChild(h2);
-				card.appendChild(p);
-				card.appendChild(p2);
-				card.appendChild(btn);
-				
-				var ids = cur.id;
-				var arr = cur.friends;
-				var fullName = `${cur.firstName} ${cur.surname}`;
-				
-				arr.forEach(el => {
-					if(el= ids) {
-						console.log(fullName);
-					}
-				});
-			});
+			//var data = JSON.parse(this.response);
+			//getData(data);
+			users.data = JSON.parse(this.response);
+			getData(users.data)
 		} else {
 			const errorMessage = document.createElement('marquee');
 			errorMessage.textContent = `Something went wrong!`;
 			app.appendChild(errorMessage);
 		}
-		
-		console.log(data);
 	}
 
 	request.send();
+	
+	var card, h2, p, p2, btn;
+	
+	function getData(ourData) {
+		ourData.forEach(cur => {
+			card = document.createElement('div');
+			card.setAttribute('class', 'card');
+
+			h2 = document.createElement('h2');
+			h2.textContent = cur.firstName + " " + cur.surname;
+
+			p = document.createElement('p');
+			p.textContent = `Age: ${cur.age}`;
+
+			p2 = document.createElement('p');
+			p2.textContent = `Gender: ${cur.gender}`;
+				
+			btn = document.createElement('button');
+			btn.setAttribute('id', 'btn');
+			btn.textContent = 'Find more';
+
+			container.appendChild(card);
+			card.appendChild(h2);
+			card.appendChild(p);
+			card.appendChild(p2);
+			card.appendChild(btn);
+				
+		});
+		
+		document.body.addEventListener('click', function(event) {
+			if(event.srcElement.id == 'btn') {
+				for(i = 0; i < ourData.length; i++) {
+					var ids = ourData[i].id;
+					console.log(ids);
+					for(ii = 0; ii < ourData[i].friends.length; ii++){
+						var friendsID = ourData[i].friends[ii];
+						if(friendsID = ids) {
+							console.log(ourData[ids].firstName + ourData[ids].surname);
+						}
+					}
+				}
+			}
+		})
+		
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
