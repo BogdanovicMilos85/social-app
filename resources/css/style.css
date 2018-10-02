@@ -49,6 +49,12 @@ p {
     margin: 0;
 }
 
+.para {
+	padding:  0 15px 5px;
+	font-weight: 700;
+}
+
+
 #btn {
     display: block;
     margin: 15px auto;
@@ -68,6 +74,19 @@ p {
 #btn:hover {
     border: 1px solid #f39c12;
     color: #f39c12;
+}
+
+ul {
+    display: block;
+    padding: 0 15px 15px;
+    margin: 0 auto;
+    list-style: none;
+	color: #1e90ff;
+}
+
+ul li {
+	padding: 1px;
+    font-style: italic;
 }
 
 .container {
