@@ -14,18 +14,6 @@
 	app.appendChild(logo);
 	app.appendChild(container);
 	
-	class User {
-		constructor(id, name, surname, age, gender, friends) {
-			this.id = id;
-			this.name = name;
-			this.surname = surname;
-			this.age = age;
-			this.gender = gender;
-			this.friends = friends;
-		}
-	}
-	
-	const users = [];
 
 	let request = new XMLHttpRequest();
 
@@ -35,80 +23,120 @@
 	  // Begin accessing JSON data here
 	  const data = JSON.parse(this.response);
 	  if (request.status >= 200 && request.status < 400) {
-		data.forEach(cur => {
-			let card = document.createElement('div');
-			card.setAttribute('class', 'card');
+		  
+		const checkDuplicateInObject = (propertyName, inputArray) => {
+			let testObject = {},
+			duplicates = []
 
-			let h2 = document.createElement('h2');
-			h2.textContent = cur.firstName + " " + cur.surname;
+			inputArray.map(item => {
+				let itemPropertyName = item[propertyName];
+			  		if (itemPropertyName in testObject) {
+						duplicates.push(item);
+			  		} else {
+						testObject[itemPropertyName] = item;
+			  		}
+				});
 
-			let p = document.createElement('p');
-			p.textContent = `Age: ${cur.age}`;
+				return duplicates;
+		};
+		    
+		data.map(user => {
+				
+				let friends = [];
+				let allFriendsOfFriends = [];
+				let friendsOfFriends = [];
+				let suggestedFriends= [];
 
-			let p2 = document.createElement('p');
-			p2.textContent = `Gender: ${cur.gender}`;
-			
-			let p3 = document.createElement('p');
-			p3.setAttribute('class', 'para');
-			p3.textContent = `Friends with: `;
+				data.filter(res => {
 
-			let btn = document.createElement('a');
-			btn.setAttribute('class', 'btn');
-			btn.textContent = 'Find more';
-			
-			let list = document.createElement('ul');
+			  		user.friends.map(num => {
 
-			container.appendChild(card);
-			card.appendChild(h2);
-			card.appendChild(p);
-			card.appendChild(p2);
-			card.appendChild(p3);
-//			card.appendChild(btn);
-//			
-//			btn.onclick = function() {
-//				btn.setAttribute('href', 'https://google.com');
-//			}
-			
-			let friendsArr = cur.friends;
-			let id = cur.id;
-			let name = cur.firstName; 
-			let surname = cur.surname;
-			let age = cur.age;
-			let gender = cur.gender;
+						if (res.id == num) {
+				  			friends.push(res);
 
-			
-			let friends = friendsArr.map(friendId => {
-//				console.log("friendID is: ", friendId);
-				let friend = data.find(cur => {
-					return cur.id === friendId;
+				  				data.filter(res2 => {
+									res.friends.map(num2 => {
+					  					if (res2.id == num2 && res2.id != user.id) {
+											allFriendsOfFriends.push(res2);
+					  					}
+									});
+				  				});
+
+				  		for (var i = 0; i < allFriendsOfFriends.length; i++) {
+							if (friendsOfFriends.indexOf(allFriendsOfFriends[i]) == -1) {
+					  			friendsOfFriends.push(allFriendsOfFriends[i]);
+							}
+				  		}
+				  			suggestedFriends = checkDuplicateInObject("id", allFriendsOfFriends);
+						}
+			  		});
+				});
+			  
+				let card = document.createElement('div');
+				card.setAttribute('class', 'card');
+
+				let h2 = document.createElement('h2');
+				h2.textContent = user.firstName + " " + user.surname;
+
+				let p = document.createElement('p');
+				p.textContent = `Age: ${user.age}`;
+
+				let p2 = document.createElement('p');
+				p2.textContent = `Gender: ${user.gender}`;
+
+				let p3 = document.createElement('p');
+				p3.setAttribute('class', 'para');
+				p3.textContent = `Friends with: `;
+				let list = document.createElement('ul');
+
+				friends.forEach(cur => {
+					let listItem = document.createElement('li');
+					listItem.textContent = `${cur.firstName}  ${cur.surname}`;
+					list.appendChild(listItem);
 				});
 				
-            	let listItem = document.createElement('li');
-				listItem.textContent = `${friend.firstName} ${friend.surname}`;
-				list.appendChild(listItem);
+			    let p4 = document.createElement('p');
+				p4.setAttribute('class', 'para');
+				p4.textContent = 'Friends of friends:';
+				let oList = document.createElement('ol');
+				friendsOfFriends.forEach(cur => {
+					let oItem = document.createElement('li');
+					oItem.textContent = `${cur.firstName}  ${cur.surname}`;
+					oList.appendChild(oItem);
+				});
 				
-				return {
-					firstName: friend.firstName,
-					surname: friend.surname
-				};	
-			});
-			
-			card.appendChild(list);
-			
-			const allUsers = new User(id, name, surname, age, gender, friends);
-            users.push(allUsers);
-		
-		});
+				
+				let p5 = document.createElement('p');
+				p5.setAttribute('class', 'para');
+				p5.textContent = 'Suggested friends:';
+				let list2 = document.createElement('ul');
+				suggestedFriends.forEach(cur => {
+					let listItem2 = document.createElement('li');
+					listItem2.textContent = `${cur.firstName}  ${cur.surname}`;
+					list2.appendChild(listItem2);
+					
+				});
+
+				
+				container.appendChild(card);
+				card.appendChild(h2);
+				card.appendChild(p);
+				card.appendChild(p2);
+				card.appendChild(p3);
+				card.appendChild(list);
+				card.appendChild(p4);
+				card.appendChild(oList);
+				card.appendChild(p5);
+				card.appendChild(list2);		
+		  });
 	  } else {
 			const errorMessage = document.createElement('marquee');
 			errorMessage.textContent = `Something went wrong!`;
 			app.appendChild(errorMessage);
 	  }
 		
-		console.log(users);
 	}
 
 	request.send();
-
 }
 

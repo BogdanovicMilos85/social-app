@@ -84,9 +84,17 @@ ul {
 	color: #1e90ff;
 }
 
-ul li {
+ul li, ol li {
 	padding: 1px;
     font-style: italic;
+}
+
+ol {
+    display: block;
+    list-style: none;
+    padding: 5px 15px 0;
+    color: #f37200;
+
 }
 
 .container {
